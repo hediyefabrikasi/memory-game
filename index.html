@@ -4,7 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aşkımızın Hatıraları</title>
+
   <style>
+    :root {
+      --bg1: #ff758c;
+      --bg2: #ff7eb3;
+      --cardFront1: #ff9a9e;
+      --cardFront2: #fad0c4;
+      --accent: #ff3b6f;
+      --panel: #ffffff;
+    }
+
+    body.dark {
+      --bg1: #141414;
+      --bg2: #2c2c2c;
+      --cardFront1: #444;
+      --cardFront2: #666;
+      --accent: #f472b6;
+      --panel: #1f1f1f;
+      color: white;
+    }
+
+    body.pastel {
+      --bg1: #c7d2fe;
+      --bg2: #fbcfe8;
+      --cardFront1: #fde68a;
+      --cardFront2: #f9a8d4;
+      --accent: #7c3aed;
+      --panel: #ffffff;
+    }
+
+    body.neon {
+      --bg1: #020024;
+      --bg2: #090979;
+      --cardFront1: #ff00ff;
+      --cardFront2: #00ffff;
+      --accent: #00ffff;
+      --panel: #020024;
+      color: #00ffff;
+    }
+
     * {
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -12,61 +51,96 @@
 
     body {
       margin: 0;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: background 0.4s;
     }
 
     .app {
-      background: white;
+      background: var(--panel);
       width: 95%;
       max-width: 480px;
       border-radius: 22px;
-      padding: 18px;
+      padding: 16px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.2);
       text-align: center;
+      position: relative;
     }
 
     h1 {
-      margin: 6px 0 8px;
+      margin: 4px 0 4px;
       font-size: 22px;
       font-weight: 800;
     }
 
     .subtitle {
       font-size: 13px;
-      color: #ff3b6f;
-      margin-bottom: 10px;
+      color: var(--accent);
+      margin-bottom: 8px;
       font-weight: 600;
     }
 
     .top-bar {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
-      font-size: 13px;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 12px;
       font-weight: 700;
+      flex-wrap: wrap;
     }
 
     .pill {
-      background: #ffe2ea;
+      background: rgba(255,255,255,0.6);
       padding: 4px 10px;
       border-radius: 999px;
-      color: #ff3b6f;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    body.dark .pill,
+    body.neon .pill {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .controls {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .mini-btn {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(255,255,255,0.7);
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    body.dark .mini-btn,
+    body.neon .mini-btn {
+      background: rgba(255,255,255,0.12);
     }
 
     .grid {
       display: grid;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .card {
       aspect-ratio: 1 / 1;
       perspective: 1000px;
       cursor: pointer;
+      position: relative;
     }
 
     .card-inner {
@@ -75,7 +149,7 @@
       border-radius: 14px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.5s;
+      transition: transform 0.45s;
     }
 
     .card.flipped .card-inner {
@@ -90,23 +164,73 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .card-front {
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background: linear-gradient(135deg, var(--cardFront1), var(--cardFront2));
       font-size: 26px;
       color: white;
     }
 
     .card-back {
       transform: rotateY(180deg);
-      overflow: hidden;
     }
 
     .card-back img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    /* 💥 Kalp patlama */
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 1; }
+      100% { transform: translateY(-40px) scale(1.4); opacity: 0; }
+    }
+
+    /* 🎉 Konfeti */
+    .confetti {
+      position: fixed;
+      width: 6px;
+      height: 10px;
+      background: red;
+      top: -10px;
+      animation: fall 2s linear forwards;
+      z-index: 50;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* 🔔 Toast mesaj */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.75);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      z-index: 20;
+      animation: fadeToast 2s forwards;
+    }
+
+    @keyframes fadeToast {
+      0% { opacity: 0; transform: translate(-50%, 10px); }
+      10% { opacity: 1; transform: translate(-50%, 0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -10px); }
     }
 
     .overlay {
@@ -120,7 +244,7 @@
     }
 
     .modal {
-      background: white;
+      background: var(--panel);
       padding: 22px;
       border-radius: 20px;
       width: 90%;
@@ -137,7 +261,7 @@
     .modal h2 {
       margin-top: 0;
       font-size: 20px;
-      color: #ff3b6f;
+      color: var(--accent);
     }
 
     .modal p {
@@ -146,7 +270,7 @@
     }
 
     button {
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
       border: none;
       color: white;
       padding: 12px 16px;
@@ -155,7 +279,7 @@
       font-weight: 800;
       cursor: pointer;
       width: 100%;
-      box-shadow: 0 6px 18px rgba(255,59,111,0.35);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     }
 
     button:active {
@@ -165,18 +289,29 @@
     .hidden {
       display: none;
     }
+
+    .stars {
+      font-size: 20px;
+      margin-top: 6px;
+    }
   </style>
 </head>
-<body>
+<body class="romantic">
 
 <div class="app">
-  <h1>💖 Aşkımızın Hatıraları 💖</h1>
-  <div class="subtitle">Fotoğraflarınızı eşleştir, anıları yeniden yaşa</div>
+  <h1 id="title">💖 Aşkımızın Hatıraları 💖</h1>
+  <div id="subtitle" class="subtitle">Sevgilim <span id="loverName">Aşkım</span>, hadi başlayalım 💌</div>
 
   <div class="top-bar">
     <div class="pill">Level <span id="level">1</span></div>
     <div class="pill">⏱ <span id="time">0</span>s</div>
     <div class="pill">💘 <span id="score">0</span></div>
+    <div class="pill">🏆 En İyi: <span id="bestScore">0</span></div>
+  </div>
+
+  <div class="controls">
+    <button class="mini-btn" onclick="toggleSound()">🔊 Ses</button>
+    <button class="mini-btn" onclick="changeTheme()">🎨 Tema</button>
   </div>
 
   <div id="grid" class="grid"></div>
@@ -186,11 +321,17 @@
 <div id="startScreen" class="overlay">
   <div class="modal">
     <h2>💌 Sürprizin Hazır!</h2>
-    <p>
-      Bu oyun senin için hazırlandı.<br>
-      Her eşleşmede bir anımız canlanacak 💕
-    </p>
+    <p id="startMessage"></p>
     <button onclick="startGame()">Oyuna Başla</button>
+  </div>
+</div>
+
+<!-- LEVEL BAŞLANGIÇ -->
+<div id="levelStart" class="overlay hidden">
+  <div class="modal">
+    <h2>💖 Yeni Level</h2>
+    <p id="levelStartMessage"></p>
+    <button onclick="beginLevel()">Başla</button>
   </div>
 </div>
 
@@ -199,6 +340,7 @@
   <div class="modal">
     <h2>💞 Harika!</h2>
     <p id="levelMessage"></p>
+    <div class="stars" id="levelStars"></div>
     <button onclick="nextLevel()">Devam Et</button>
   </div>
 </div>
@@ -206,12 +348,12 @@
 <!-- OYUN BİTTİ -->
 <div id="gameComplete" class="overlay hidden">
   <div class="modal">
-    <h2>🏆 Tebrikler Aşkım!</h2>
+    <h2>🏆 Tebrikler <span id="finalName"></span>!</h2>
     <p>
-      Bu oyunu <strong>kalbinle</strong> kazandın 💖<br><br>
       Toplam Puanın: <strong><span id="finalScore"></span></strong>
     </p>
-    <p style="font-size:13px;color:#ff3b6f;">
+    <div class="stars" id="finalStars"></div>
+    <p style="font-size:13px;color:var(--accent);">
       Seni çok seviyorum 💌
     </p>
     <button onclick="restartGame()">Yeniden Oyna</button>
@@ -227,50 +369,99 @@
 <audio id="winSound" src="audios/win.mp3"></audio>
 
 <script>
-/* -------- FOTOĞRAFLAR -------- */
+/* ==============================
+   🔧 AYARLAR — SATIŞ İÇİN DÜZENLE
+================================ */
+
+// 👉 MÜŞTERİ ADI
+const CUSTOMER_NAME = "Aşkım";
+
+// 👉 FOTOĞRAFLAR
 const allImages = [
   "images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg","images/5.jpg",
   "images/6.jpg","images/7.jpg","images/8.jpg","images/9.jpg","images/10.jpg",
   "images/11.jpg","images/12.jpg","images/13.jpg","images/14.jpg","images/15.jpg"
 ];
 
-/* -------- LEVEL AYARLARI -------- */
+// 👉 LEVEL KART SAYILARI
 const levels = [6, 12, 16, 20];
-const romanticMessages = [
-  "İlk anılar… Kalbim burada başladı 💘",
+
+// 👉 LEVEL BAŞLANGIÇ MESAJLARI
+const levelStartMessages = [
+  "İlk anılarımız… Kalbim burada başladı 💘",
   "Birlikte güldüğümüz günler gibi 💕",
   "Her eşleşme seni bana biraz daha hatırlatıyor 😘",
   "İşte aşkımızın finali 💖"
 ];
 
+// 👉 LEVEL BİTİŞ MESAJLARI
+const romanticMessages = [
+  "Bu level kalbime dokundu 💘",
+  "Her eşleşme seni bana daha çok hatırlattı 💕",
+  "Bu oyun aşkımızın özeti gibi 😘",
+  "Kazanan her zaman biziz 💖"
+];
+
+// 👉 YANLIŞ EŞLEŞME MESAJLARI
+const wrongMessages = [
+  "Ama olsun, seni yine de çok seviyorum 💗",
+  "Biraz karıştırdın ama kalbimi değil 😘",
+  "Sorun değil, aşk devam ediyor 💞",
+  "Bu sefer olmadı ama ben buradayım 💖"
+];
+
+// 👉 TEMA LİSTESİ
+const themes = ["romantic", "pastel", "dark", "neon"];
+
+/* ==============================
+   🎮 OYUN MOTORU
+================================ */
+
 let level = 0;
 let score = 0;
 let time = 0;
 let timerInterval = null;
-
 let firstCard = null;
 let secondCard = null;
 let lockBoard = false;
 let matchedPairs = 0;
+let soundOn = true;
+let themeIndex = 0;
 
 const grid = document.getElementById("grid");
 const levelEl = document.getElementById("level");
 const scoreEl = document.getElementById("score");
 const timeEl = document.getElementById("time");
+const bestScoreEl = document.getElementById("bestScore");
+const loverNameEl = document.getElementById("loverName");
+const finalNameEl = document.getElementById("finalName");
 
 const startScreen = document.getElementById("startScreen");
+const levelStart = document.getElementById("levelStart");
 const levelComplete = document.getElementById("levelComplete");
 const gameComplete = document.getElementById("gameComplete");
-const finalScoreEl = document.getElementById("finalScore");
-const levelMessageEl = document.getElementById("levelMessage");
 
-/* -------- SES NESNELERİ -------- */
+const levelMessageEl = document.getElementById("levelMessage");
+const levelStarsEl = document.getElementById("levelStars");
+const finalScoreEl = document.getElementById("finalScore");
+const finalStarsEl = document.getElementById("finalStars");
+const startMessageEl = document.getElementById("startMessage");
+const levelStartMessageEl = document.getElementById("levelStartMessage");
+
+/* -------- SES -------- */
 const bgMusic = document.getElementById("bgMusic");
 const flipSound = document.getElementById("flipSound");
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
 const levelSound = document.getElementById("levelSound");
 const winSound = document.getElementById("winSound");
+
+/* -------- BAŞLANGIÇ -------- */
+loverNameEl.textContent = CUSTOMER_NAME;
+finalNameEl.textContent = CUSTOMER_NAME;
+startMessageEl.innerHTML = `Sevgilim <strong>${CUSTOMER_NAME}</strong>, bu oyun senin için hazırlandı 💖<br>Hazırsan başlayalım 💌`;
+
+bestScoreEl.textContent = localStorage.getItem("bestScore") || 0;
 
 /* -------- OYUN -------- */
 function startGame() {
@@ -280,11 +471,13 @@ function startGame() {
   time = 0;
   updateTopBar();
   startTimer();
-  loadLevel();
+  showLevelStart();
 
-  bgMusic.volume = 0.35;
-  bgMusic.currentTime = 0;
-  bgMusic.play();
+  if (soundOn) {
+    bgMusic.volume = 0.35;
+    bgMusic.currentTime = 0;
+    bgMusic.play();
+  }
 }
 
 function restartGame() {
@@ -292,10 +485,20 @@ function restartGame() {
   startGame();
 }
 
+function showLevelStart() {
+  levelStartMessageEl.textContent = levelStartMessages[level];
+  levelStart.classList.remove("hidden");
+}
+
+function beginLevel() {
+  levelStart.classList.add("hidden");
+  loadLevel();
+}
+
 function nextLevel() {
   levelComplete.classList.add("hidden");
   level++;
-  loadLevel();
+  showLevelStart();
 }
 
 function updateTopBar() {
@@ -312,6 +515,7 @@ function startTimer() {
   }, 1000);
 }
 
+/* -------- LEVEL YÜKLE -------- */
 function loadLevel() {
   grid.innerHTML = "";
   firstCard = null;
@@ -349,12 +553,15 @@ function loadLevel() {
   updateTopBar();
 }
 
+/* -------- KART TIK -------- */
 function flipCard(card) {
   if (lockBoard) return;
   if (card === firstCard) return;
 
-  flipSound.currentTime = 0;
-  flipSound.play();
+  if (soundOn) {
+    flipSound.currentTime = 0;
+    flipSound.play();
+  }
 
   card.classList.add("flipped");
 
@@ -367,15 +574,21 @@ function flipCard(card) {
   checkMatch();
 }
 
+/* -------- EŞLEŞME -------- */
 function checkMatch() {
   const isMatch = firstCard.dataset.image === secondCard.dataset.image;
 
   if (isMatch) {
-    correctSound.currentTime = 0;
-    correctSound.play();
+    if (soundOn) {
+      correctSound.currentTime = 0;
+      correctSound.play();
+    }
 
     score += 10;
     matchedPairs++;
+
+    heartBurst(firstCard);
+    heartBurst(secondCard);
 
     firstCard.style.pointerEvents = "none";
     secondCard.style.pointerEvents = "none";
@@ -385,9 +598,13 @@ function checkMatch() {
     if (matchedPairs === levels[level] / 2) {
       setTimeout(() => {
         if (level < levels.length - 1) {
-          levelSound.currentTime = 0;
-          levelSound.play();
+          if (soundOn) {
+            levelSound.currentTime = 0;
+            levelSound.play();
+          }
+          showConfetti();
           levelMessageEl.textContent = romanticMessages[level];
+          levelStarsEl.textContent = getStarsForTime();
           levelComplete.classList.remove("hidden");
         } else {
           endGame();
@@ -395,8 +612,12 @@ function checkMatch() {
       }, 600);
     }
   } else {
-    wrongSound.currentTime = 0;
-    wrongSound.play();
+    if (soundOn) {
+      wrongSound.currentTime = 0;
+      wrongSound.play();
+    }
+
+    showToast(randomFrom(wrongMessages));
 
     lockBoard = true;
     setTimeout(() => {
@@ -413,17 +634,98 @@ function resetTurn() {
   updateTopBar();
 }
 
+/* -------- OYUN BİTTİ -------- */
 function endGame() {
   clearInterval(timerInterval);
-  winSound.currentTime = 0;
-  winSound.play();
-  bgMusic.pause();
+
+  if (soundOn) {
+    winSound.currentTime = 0;
+    winSound.play();
+    bgMusic.pause();
+  }
+
   finalScoreEl.textContent = score;
+  finalStarsEl.textContent = getStarsForTime();
+
+  const best = localStorage.getItem("bestScore") || 0;
+  if (score > best) {
+    localStorage.setItem("bestScore", score);
+    bestScoreEl.textContent = score;
+  }
+
+  showConfetti();
   gameComplete.classList.remove("hidden");
 }
 
+/* -------- YILDIZ SİSTEMİ -------- */
+function getStarsForTime() {
+  if (time < 60) return "⭐⭐⭐⭐⭐";
+  if (time < 90) return "⭐⭐⭐⭐";
+  if (time < 120) return "⭐⭐⭐";
+  if (time < 150) return "⭐⭐";
+  return "⭐";
+}
+
+/* -------- SES AÇ / KAPA -------- */
+function toggleSound() {
+  soundOn = !soundOn;
+  if (!soundOn) {
+    bgMusic.pause();
+    showToast("🔇 Ses kapatıldı");
+  } else {
+    bgMusic.play();
+    showToast("🔊 Ses açıldı");
+  }
+}
+
+/* -------- TEMA -------- */
+function changeTheme() {
+  themeIndex = (themeIndex + 1) % themes.length;
+  document.body.className = themes[themeIndex];
+  showToast("🎨 Tema değiştirildi");
+}
+
+/* -------- EFEKTLER -------- */
+function heartBurst(card) {
+  const rect = card.getBoundingClientRect();
+  for (let i = 0; i < 5; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "💖";
+    heart.style.left = rect.left + rect.width / 2 + "px";
+    heart.style.top = rect.top + rect.height / 2 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+function showConfetti() {
+  for (let i = 0; i < 40; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.background = `hsl(${Math.random()*360},100%,60%)`;
+    confetti.style.animationDuration = 1.5 + Math.random() * 1.5 + "s";
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 2500);
+  }
+}
+
+function showToast(text) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = text;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+/* -------- UTIL -------- */
 function shuffle(array) {
   return array.sort(() => Math.random() - 0.5);
+}
+
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 </script>
 
