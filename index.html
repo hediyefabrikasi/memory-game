@@ -220,8 +220,6 @@
 
 <script>
 /* -------- FOTOĞRAFLAR -------- */
-/* Müşteriden gelen fotoğrafları images klasörüne
-   1.jpg, 2.jpg, 3.jpg ... şeklinde koyman yeterli */
 const allImages = [
   "images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg","images/5.jpg",
   "images/6.jpg","images/7.jpg","images/8.jpg","images/9.jpg","images/10.jpg",
@@ -229,7 +227,7 @@ const allImages = [
 ];
 
 /* -------- LEVEL AYARLARI -------- */
-const levels = [6, 12, 16, 20];
+const levels = [6, 10, 14, 18];
 const romanticMessages = [
   "İlk anılar… Kalbim burada başladı 💘",
   "Birlikte güldüğümüz günler gibi 💕",
@@ -307,7 +305,7 @@ function loadLevel() {
   const selectedImages = shuffle([...allImages]).slice(0, pairCount);
   const cards = shuffle([...selectedImages, ...selectedImages]);
 
-  const columns = cardCount <= 6 ? 3 : cardCount <= 10 ? 4 : cardCount <= 14 ? 4 : 5;
+  const columns = cardCount <= 6 ? 3 : 4;
   grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   cards.forEach(img => {
