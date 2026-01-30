@@ -218,6 +218,14 @@
   </div>
 </div>
 
+<!-- SESLER -->
+<audio id="bgMusic" src="audios/bg.mp3" loop></audio>
+<audio id="flipSound" src="audios/flip.mp3"></audio>
+<audio id="correctSound" src="audios/correct.mp3"></audio>
+<audio id="wrongSound" src="audios/wrong.mp3"></audio>
+<audio id="levelSound" src="audios/level.mp3"></audio>
+<audio id="winSound" src="audios/win.mp3"></audio>
+
 <script>
 /* -------- FOTOĞRAFLAR -------- */
 const allImages = [
@@ -256,6 +264,14 @@ const gameComplete = document.getElementById("gameComplete");
 const finalScoreEl = document.getElementById("finalScore");
 const levelMessageEl = document.getElementById("levelMessage");
 
+/* -------- SES NESNELERİ -------- */
+const bgMusic = document.getElementById("bgMusic");
+const flipSound = document.getElementById("flipSound");
+const correctSound = document.getElementById("correctSound");
+const wrongSound = document.getElementById("wrongSound");
+const levelSound = document.getElementById("levelSound");
+const winSound = document.getElementById("winSound");
+
 /* -------- OYUN -------- */
 function startGame() {
   startScreen.classList.add("hidden");
@@ -265,6 +281,10 @@ function startGame() {
   updateTopBar();
   startTimer();
   loadLevel();
+
+  bgMusic.volume = 0.35;
+  bgMusic.currentTime = 0;
+  bgMusic.play();
 }
 
 function restartGame() {
@@ -333,6 +353,9 @@ function flipCard(card) {
   if (lockBoard) return;
   if (card === firstCard) return;
 
+  flipSound.currentTime = 0;
+  flipSound.play();
+
   card.classList.add("flipped");
 
   if (!firstCard) {
@@ -348,17 +371,22 @@ function checkMatch() {
   const isMatch = firstCard.dataset.image === secondCard.dataset.image;
 
   if (isMatch) {
+    correctSound.currentTime = 0;
+    correctSound.play();
+
     score += 10;
     matchedPairs++;
 
-    firstCard.removeEventListener("click", flipCard);
-    secondCard.removeEventListener("click", flipCard);
+    firstCard.style.pointerEvents = "none";
+    secondCard.style.pointerEvents = "none";
 
     resetTurn();
 
     if (matchedPairs === levels[level] / 2) {
       setTimeout(() => {
         if (level < levels.length - 1) {
+          levelSound.currentTime = 0;
+          levelSound.play();
           levelMessageEl.textContent = romanticMessages[level];
           levelComplete.classList.remove("hidden");
         } else {
@@ -367,6 +395,9 @@ function checkMatch() {
       }, 600);
     }
   } else {
+    wrongSound.currentTime = 0;
+    wrongSound.play();
+
     lockBoard = true;
     setTimeout(() => {
       firstCard.classList.remove("flipped");
@@ -384,6 +415,9 @@ function resetTurn() {
 
 function endGame() {
   clearInterval(timerInterval);
+  winSound.currentTime = 0;
+  winSound.play();
+  bgMusic.pause();
   finalScoreEl.textContent = score;
   gameComplete.classList.remove("hidden");
 }
@@ -395,4 +429,3 @@ function shuffle(array) {
 
 </body>
 </html>
-
