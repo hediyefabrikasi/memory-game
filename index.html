@@ -306,7 +306,7 @@
     <div class="pill">Level <span id="level">1</span></div>
     <div class="pill">⏱ <span id="time">0</span>s</div>
     <div class="pill">💘 <span id="score">0</span></div>
-    <div class="pill">🏆 En İyi: <span id="bestScore">0</span></div>
+    <div class="pill">🏆 En İyi: <span id="bestScore">—</span>s</div>
   </div>
 
   <div class="controls">
@@ -461,7 +461,8 @@ loverNameEl.textContent = CUSTOMER_NAME;
 finalNameEl.textContent = CUSTOMER_NAME;
 startMessageEl.innerHTML = `Sevgilim <strong>${CUSTOMER_NAME}</strong>, bu oyun senin için hazırlandı 💖<br>Hazırsan başlayalım 💌`;
 
-bestScoreEl.textContent = localStorage.getItem("bestScore") || 0;
+const storedBestTime = localStorage.getItem("bestTime");
+bestScoreEl.textContent = storedBestTime ? storedBestTime : "—";
 
 /* -------- OYUN -------- */
 function startGame() {
@@ -647,10 +648,10 @@ function endGame() {
   finalScoreEl.textContent = score;
   finalStarsEl.textContent = getStarsForTime();
 
-  const best = localStorage.getItem("bestScore") || 0;
-  if (score > best) {
-    localStorage.setItem("bestScore", score);
-    bestScoreEl.textContent = score;
+  const bestTime = localStorage.getItem("bestTime");
+  if (!bestTime || time < bestTime) {
+    localStorage.setItem("bestTime", time);
+    bestScoreEl.textContent = time;
   }
 
   showConfetti();
@@ -731,4 +732,3 @@ function randomFrom(arr) {
 
 </body>
 </html>
-
